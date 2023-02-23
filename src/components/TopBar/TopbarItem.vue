@@ -1,0 +1,121 @@
+<template>
+    <v-menu
+        right
+        bottom
+        content-class="menu"
+    >
+        <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+                :class="['menu-btn', btnClass]"
+            >{{ label }}</v-btn>
+        </template>
+
+        <v-list>
+            <v-list-item
+                v-for="item in options"
+                :key="item.key"
+                :class="[
+                    'menu-item',
+                    {
+                        'has-childrens': item.childrens
+                    }
+                ]"
+                @click="$emit('run', item)"
+            >
+                <v-menu
+                    top
+                    right
+                    content-class="submenu"
+                    :offset-x="true"
+                    v-if="item.childrens"
+                >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            v-bind="attrs"
+                            v-on="on"
+                            :elevation="0"
+                            :class="['submenu-item-btn', 'd-flex', 'justify-start', 'px-8']"
+                        >
+                            <v-icon class="mx-0" v-if="item.icon">
+                                {{ item.icon }}
+                            </v-icon>
+                            <div :class="{'mx-3': item.icon}"></div>
+                            <div class="text-left mr-4">{{ item.label }}</div>
+                        </v-btn>
+                    </template>
+
+                    <v-list>
+                        <v-list-item
+                            v-for="children in item.childrens"
+                            :key="children.key"
+                            :class="['submenu-item']"
+                            @click="$emit('run', item)"
+                        >
+                            <v-list-item-title v-if="children.label">{{ children.label }}</v-list-item-title>
+                            <slot :name="'children_' + children.key" :item="item" :children="children" v-else></slot>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+                <v-btn
+                    color="transparent"
+                    elevation="0"
+                    class="d-flex justify-space-around px-8" style="width: 100%"
+                    @click="$emit('run', item)"
+                    v-else
+                >
+                    <v-list-item-icon v-if="item.icon" style="margin-right: 0">
+                        <v-icon>{{ item.icon }}</v-icon>
+                    </v-list-item-icon>
+                    <div :class="{'mx-2': item.icon}"></div>
+                    <v-list-item-content style="width: 100%">
+                        <div class="text-left pl-2 mr-4">{{ item.label }}</div>
+                    </v-list-item-content>
+                </v-btn>
+            </v-list-item>
+        </v-list>
+    </v-menu>
+</template>
+
+<script>
+export default {
+    name: 'TopbarItem',
+    props: {
+        label: {
+            type: String,
+        },
+        options: {
+            type: Array,
+        },
+        btnClass: {
+            type: [Array, Object, String, undefined]
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.menu.v-menu__content.menuable__content__active {
+    top: 36px !important
+}
+.menu-item.v-list-item {
+    padding: 0;
+
+    .v-btn {
+        padding: 0 32px;
+    }
+}
+.menu-item.has-childrens::after {
+    content: '>'
+}
+.submenu-item-btn {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    width: 100%;
+
+    .v-btn__content {
+        width: 100%;
+    }
+}
+</style>

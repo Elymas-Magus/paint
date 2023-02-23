@@ -1,0 +1,20 @@
+{
+    "topbar": {
+        "file": "File",
+        "edit": "Edit",
+        "insert": "Insert",
+        "help": "Help",
+        "options": {
+            "download": "Download",
+            "close": "Close",
+            "share": "Share",
+            "undo": "Undo",
+            "redo": "Redo"
+        }
+    },
+    "sidebar": {
+        "file": "File",
+        "edit": "Edit",
+        "help": "Help"
+    }
+}

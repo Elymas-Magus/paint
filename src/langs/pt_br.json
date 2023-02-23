@@ -1,0 +1,34 @@
+{
+    "topbar": {
+        "file": "Arquivo",
+        "edit": "Editar",
+        "insert": "Inserir",
+        "help": "Ajuda",
+        "options": {
+            "download": "Baixar",
+            "close": "Fechar",
+            "share": "Compartilhar",
+            "undo": "Desfazer",
+            "redo": "Refazer",
+            "shapes": "Formas",
+            "text": "Texto",
+            "tutorials": "Tutoriais",
+            "github": "GitHub",
+            "about": "Sobre",
+            "clean": "Limpar"
+        }
+    },
+    "sidebar": {
+        "tools": "Ferramentas",
+        "weight": "Espessura",
+        "configs": "Espessura e Cores",
+        "line": "Tipo de Linha",
+        "selected": "Selecionado",
+        "zoom": "Zoom",
+        "colors": "Cores"
+    },
+    "weight_dialog": {
+        "title": "Espessura",
+        "label": "Em pixels"
+    }
+}
