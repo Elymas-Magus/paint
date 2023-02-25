@@ -7,6 +7,30 @@
 <script>
 export default {
     name: 'CanvasField',
+	props: {
+		tool: {
+			type: Object,
+		},
+		palette: {
+			type: Object,
+		},
+		zoom: {
+			type: Object,
+		},
+		font: {
+			type: Object,
+		},
+	},
+	data() {
+		return {
+			elements: [],
+		}
+	},
+	methods: {
+		invoker(command) {
+			console.log(command);
+		}
+	},
 }
 </script>
 

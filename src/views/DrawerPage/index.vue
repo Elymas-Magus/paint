@@ -10,7 +10,13 @@
 				@configure="configPalette"
 				@zoom="setZoom"
 			></sidebar>
-			<canvas-field></canvas-field>
+			<canvas-field
+				ref="canvas"
+				:tool="tool"
+				:zoom="zoom"
+				:font="font"
+				:palette="palette"
+			></canvas-field>
 		</div>
 	</v-app>
 </template>
@@ -33,26 +39,36 @@ export default {
 		// PaintingBox
 	},
 
-	data: () => ({
-		
-	}),
+	data() {
+		return {
+			tool: {},
+			palette: {},
+			zoom: {},
+			font: {},
+		}	
+	},
 
 	methods: {
 		formatText(format) {
 			console.log(format);
-		},
-		runCommand(command) {
-			console.log('run-command', command);
+			this.font = format;
 		},
 		selectTool(tool) {
 			console.log(tool);
+			this.tool = tool;
 		},
 		configPalette(palette) {
+			this.palette = palette;
 			console.log(palette);
 		},
 		setZoom(zoom) {
 			console.log(zoom);
+			this.zoom = zoom;
 		},
+		runCommand(command) {
+			console.log(command);
+			this.$refs.canvas.invoker(command);
+		}
 	},
 };
 </script>
