@@ -22,13 +22,14 @@
                         'has-childrens': item.childrens
                     }
                 ]"
-                @click="$emit('run', item)"
             >
                 <v-menu
                     top
                     right
                     content-class="submenu"
                     :offset-x="true"
+                    :close-on-click="false"
+                    :close-on-content-click="false"
                     v-if="item.childrens"
                 >
                     <template v-slot:activator="{ on, attrs }">
@@ -46,23 +47,22 @@
                         </v-btn>
                     </template>
 
-                    <v-list>
-                        <v-list-item
+                    <v-card class="py-4 px-5">
+                        <div
                             v-for="children in item.childrens"
                             :key="children.key"
                             :class="['submenu-item']"
-                            @click="$emit('run', item)"
                         >
                             <v-list-item-title v-if="children.label">{{ children.label }}</v-list-item-title>
                             <slot :name="'children_' + children.key" :item="item" :children="children" v-else></slot>
-                        </v-list-item>
-                    </v-list>
+                        </div>
+                    </v-card>
                 </v-menu>
                 <v-btn
                     color="transparent"
                     elevation="0"
                     class="d-flex justify-space-around px-8" style="width: 100%"
-                    @click="$emit('run', item)"
+                    @click="runCommand(item)"
                     v-else
                 >
                     <v-list-item-icon v-if="item.icon" style="margin-right: 0">
@@ -90,32 +90,16 @@ export default {
         },
         btnClass: {
             type: [Array, Object, String, undefined]
+        },
+    },
+    methods: {
+        runCommand(item) {
+            this.$emit('run-command', item);
         }
-    }
+    },
 }
 </script>
 
 <style lang="scss" scoped>
-.menu.v-menu__content.menuable__content__active {
-    top: 36px !important
-}
-.menu-item.v-list-item {
-    padding: 0;
-
-    .v-btn {
-        padding: 0 32px;
-    }
-}
-.menu-item.has-childrens::after {
-    content: '>'
-}
-.submenu-item-btn {
-    background-color: transparent !important;
-    box-shadow: none !important;
-    width: 100%;
-
-    .v-btn__content {
-        width: 100%;
-    }
-}
+@import "./styles";
 </style>

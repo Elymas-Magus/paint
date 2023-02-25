@@ -39,7 +39,6 @@ export default {
 			this.state = newValue;
 		},
 		color(newValue) {
-			console.log(newValue)
 			this.$emit('input', newValue);
 		},
 		value(newValue) {

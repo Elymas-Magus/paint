@@ -1,8 +1,15 @@
 <template>
 	<v-app>
-		<topbar></topbar>
+		<topbar
+			@text-format="formatText"
+			@run-command="runCommand"
+		></topbar>
 		<div>
-			<sidebar></sidebar>
+			<sidebar
+				@select="selectTool"
+				@configure="configPalette"
+				@zoom="setZoom"
+			></sidebar>
 			<canvas-field></canvas-field>
 		</div>
 	</v-app>
@@ -27,8 +34,26 @@ export default {
 	},
 
 	data: () => ({
-		//
+		
 	}),
+
+	methods: {
+		formatText(format) {
+			console.log(format);
+		},
+		runCommand(command) {
+			console.log('run-command', command);
+		},
+		selectTool(tool) {
+			console.log(tool);
+		},
+		configPalette(palette) {
+			console.log(palette);
+		},
+		setZoom(zoom) {
+			console.log(zoom);
+		},
+	},
 };
 </script>
 

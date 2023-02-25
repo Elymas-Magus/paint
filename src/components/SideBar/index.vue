@@ -2,115 +2,142 @@
 	<div>
 		<div class="sidebar">
 			<div class="d-flex flex-column align-end sidebar-container">
-				<div class="w-100">
-					<h3>
-						<v-icon class="sidebar-icon">
-							mdi-tools
-						</v-icon>
-						{{ labels.tools }}
-					</h3>
+				<div class="sidebar-tool-list w-100" style="margin-bottom: 25px; padding-bottom: 75px;">
 					<div class="w-100">
-						<table class="tools">
-							<tr v-for="(tools, group) in tools.itemsGroup" :key="group">
-								<td v-for="(tool, index) in tools" :key="tool.key">
-									<v-btn
-										class="tool-item"
-										:class="{'active': tool.selected}"
-										@click="select(['itemsGroup', group, index])"
-									>
-										<v-icon>{{ tool.icon }}</v-icon>
-									</v-btn>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="mt-5 w-100">
-					<h3>
-						<v-icon class="sidebar-icon">
-							mdi-palette-swatch-variant
-						</v-icon>
-						{{ labels.configs }}
-					</h3>
-					<div class="w-100">
-						<table class="tools">
-							<tr v-for="(tools, group) in tools.weightsGroup" :key="group">
-								<td v-for="(tool) in tools" :key="tool.key">
-									<v-btn
-										class="tool-item"
-										:class="{'active': tool.selected}"
-										@click="config(tool.key)"
-									>
-										<v-icon>{{ tool.icon }}</v-icon>
-									</v-btn>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				<div class="mt-5 w-100" v-if="selectedTool">
-					<h3>
-						<v-icon class="sidebar-icon">
-							mdi-select-all
-						</v-icon>
-						{{ labels.selected }}
-					</h3>
-					<div class="w-100">
-						<v-icon
-							x-large
-							class="sidebar-icon ml-5"
-							style="width: 50px"
-							@click="changeColors"
-						>
-							{{ selectedTool.icon }}
-						</v-icon>
-					</div>
-				</div>
-				<div class="mt-5 w-100" v-if="labels.colors">
-					<h3>
-						<v-icon class="sidebar-icon">
-							mdi-format-line-weight
-						</v-icon>
-						{{ labels.weight }}
-					</h3>
-					<div class="weight-info text-center">
-						{{ configs.weight }}px (pixels)
-					</div>
-					<div class="d-flex flex-start">
-						<div class="current-weight" :style="'height: ' + configs.weight + 'px'"></div>
-					</div>
-				</div>
-				<div class="mt-5 w-100" v-if="labels.colors">
-					<h3>
-						<v-icon class="sidebar-icon">
-							mdi-palette
-						</v-icon>
-						{{ labels.colors }}
-					</h3>
-					<div class="d-flex flex-start">
-						<div class="selected-colors-container">
-							<div
-								class="selected-colors background-color"
-								:style="'background-color:' + configs.background"
-								@click="config('background')"
-							></div>
-							<div
-								class="selected-colors foreground-color"
-								:style="'background-color:' + configs.foreground"
-								@click="config('foreground')"
-							></div>
+						<div class="w-100">
+							<h3>
+								<v-icon class="sidebar-icon">
+									mdi-tools
+								</v-icon>
+								{{ labels.tools }}
+							</h3>
+							<div class="w-100">
+								<table class="tools">
+									<tr v-for="(tools, group) in tools.itemsGroup" :key="group">
+										<td v-for="(tool, index) in tools" :key="tool.key">
+											<v-btn
+												class="tool-item"
+												:class="{'active': tool.selected}"
+												@click="select(['itemsGroup', group, index])"
+											>
+												<v-icon>{{ tool.icon }}</v-icon>
+											</v-btn>
+										</td>
+									</tr>
+								</table>
+							</div>
 						</div>
-						<v-icon
-							x-large
-							class="sidebar-icon ml-5"
-							style="width: 50px"
-							@click="changeColors"
-						>
-							mdi-swap-vertical
-						</v-icon>
+						<div class="mt-5 w-100">
+							<h3>
+								<v-icon class="sidebar-icon">
+									mdi-shape
+								</v-icon>
+								{{ labels.shapes }}
+							</h3>
+							<div class="w-100">
+								<table class="tools">
+									<tr v-for="(tools, group) in tools.shapeIconGroups" :key="group">
+										<td v-for="(tool, index) in tools" :key="tool.key">
+											<v-btn
+												class="tool-item"
+												:class="{'active': tool.selected}"
+												@click="select(['shapeIconGroups', group, index])"
+											>
+												<v-icon>{{ tool.icon }}</v-icon>
+											</v-btn>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="mt-5 w-100">
+							<h3>
+								<v-icon class="sidebar-icon">
+									mdi-palette-swatch-variant
+								</v-icon>
+								{{ labels.configs }}
+							</h3>
+							<div class="w-100">
+								<table class="tools">
+									<tr v-for="(tools, group) in palette.weightsGroup" :key="group">
+										<td v-for="(tool) in tools" :key="tool.key">
+											<v-btn
+												class="tool-item"
+												:class="{'active': tool.selected}"
+												@click="config(tool.key)"
+											>
+												<v-icon>{{ tool.icon }}</v-icon>
+											</v-btn>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="mt-5 w-100" v-if="selectedTool">
+							<h3>
+								<v-icon class="sidebar-icon">
+									mdi-select-all
+								</v-icon>
+								{{ labels.selected }}
+							</h3>
+							<div class="w-100">
+								<v-icon
+									x-large
+									class="sidebar-icon ml-5"
+									style="width: 50px"
+									@click="changeColors"
+								>
+									{{ selectedTool.icon }}
+								</v-icon>
+							</div>
+						</div>
+						<div class="mt-5 w-100" v-if="labels.colors">
+							<h3>
+								<v-icon class="sidebar-icon">
+									mdi-format-line-weight
+								</v-icon>
+								{{ labels.weight }}
+							</h3>
+							<div class="weight-info text-center">
+								{{ configs.weight }}px (pixels)
+							</div>
+							<div class="d-flex flex-start">
+								<div class="current-weight" :style="'height: ' + configs.weight + 'px'"></div>
+							</div>
+						</div>
+						<div class="mt-5 w-100" v-if="labels.colors">
+							<h3>
+								<v-icon class="sidebar-icon">
+									mdi-palette
+								</v-icon>
+								{{ labels.colors }}
+							</h3>
+							<div class="d-flex flex-start">
+								<div class="selected-colors-container">
+									<div
+										class="selected-colors background-color"
+										:style="'background-color:' + configs.background"
+										@click="config('background')"
+									></div>
+									<div
+										class="selected-colors foreground-color"
+										:style="'background-color:' + configs.foreground"
+										@click="config('foreground')"
+									></div>
+								</div>
+								<v-icon
+									x-large
+									class="sidebar-icon ml-5"
+									style="width: 50px"
+									@click="changeColors"
+								>
+									mdi-swap-vertical
+								</v-icon>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="mt-auto w-100">
+				<div class="sidebar-zoom mt-auto w-100">
 					<div>
 						{{ labels.zoom }}
 						<v-slider
@@ -137,7 +164,9 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import get from 'lodash/get';
+import each from 'lodash/each';
+import set from 'lodash/set';
 import { pt_br } from '@/langs';
 import ColorDialog from '@/components/ColorDialog';
 import WeightDialog from '@/components/WeightDialog';
@@ -153,6 +182,15 @@ export default {
 		return {
 			selectedTool: '',
 			labels: lang.sidebar,
+			palette: {
+				weightsGroup: [
+					[
+						{ key: 'weight', icon: 'mdi-format-line-weight' },
+						{ key: 'foreground', icon: 'mdi-palette' },
+						{ key: 'background', icon: 'mdi-palette-advanced' },
+					],
+				],
+			},
 			tools: {
 				itemsGroup: [
 					[
@@ -171,13 +209,53 @@ export default {
 						{ key: 'eraser', icon: 'mdi-eraser' },
 					],
 				],
-				weightsGroup: [
+				shapeIconGroups: [
 					[
-						{ key: 'weight', icon: 'mdi-format-line-weight' },
-						{ key: 'foreground', icon: 'mdi-palette' },
-						{ key: 'background', icon: 'mdi-palette-advanced' },
+						{ key: 'triangle', icon: 'mdi-triangle' },
+						{ key: 'square', icon: 'mdi-square' },
+						{ key: 'rhombus', icon: 'mdi-rhombus' },
 					],
-				]
+					[
+						{ key: 'hexagon', icon: 'mdi-hexagon' },
+						{ key: 'octagon', icon: 'mdi-octagon' },
+						{ key: 'circle', icon: 'mdi-circle' },
+					],
+					[
+						{ key: 'star', icon: 'mdi-star' },
+						{ key: 'hexagram', icon: 'mdi-hexagram' },
+						{ key: 'octagram', icon: 'mdi-octagram' },
+					],
+					[
+						{ key: 'triangle', icon: 'mdi-triangle-outline' },
+						{ key: 'square', icon: 'mdi-square-outline' },
+						{ key: 'rhombus', icon: 'mdi-rhombus-outline' },
+					],
+					[
+						{ key: 'hexagon', icon: 'mdi-hexagon-outline' },
+						{ key: 'octagon', icon: 'mdi-octagon-outline' },
+						{ key: 'circle', icon: 'mdi-circle-outline' },
+					],
+					[
+						{ key: 'star', icon: 'mdi-star-outline' },
+						{ key: 'hexagram', icon: 'mdi-hexagram-outline' },
+						{ key: 'octagram', icon: 'mdi-octagram-outline' },
+					],
+					[
+						{ key: 'slash', icon: 'mdi-slash-forward' },
+						{ key: 'arrow-top-left', icon: 'mdi-arrow-top-left' },
+						{ key: 'arrow-top-right', icon: 'mdi-arrow-top-right' },
+					],
+					[
+						{ key: 'arrow-bottom-left', icon: 'mdi-arrow-bottom-left' },
+						{ key: 'arrow-bottom-right', icon: 'mdi-arrow-bottom-right' },
+						{ key: 'arrow-top-left-thin', icon: 'mdi-arrow-top-left-thin' },
+					],
+					[
+						{ key: 'arrow-top-right-thin', icon: 'mdi-arrow-top-right-thin' },
+						{ key: 'arrow-bottom-left-thin', icon: 'mdi-arrow-bottom-left-thin' },
+						{ key: 'arrow-bottom-right-thin', icon: 'mdi-arrow-bottom-right-thin' },
+					],
+				],
 			},
 			zoom: {
 				value: 100,
@@ -219,18 +297,20 @@ export default {
 			this.zoom.value -= 5;
 		},
 		select(indexes) {
-			const tool = _.get(this.tools, indexes);
+			const tool = get(this.tools, indexes);
 			const selected = tool.selected
 
 			this.selectedTool = !selected ? tool : undefined;
 			
-			_.each(this.tools.itemsGroup, (tools, group) => {
-				_.each(tools, (tool, index) => {
-					_.set(this.tools, ['itemsGroup', group, index], { ...tool, selected: false })
+			each(this.tools, (toolsgroups, groupName) => {
+				each(toolsgroups, (tools, group) => {
+					each(tools, (tool, index) => {
+						set(this.tools, [groupName, group, index], { ...tool, selected: false })
+					});
 				});
 			});
 
-			_.set(this.tools, indexes, { ...tool, selected: !selected });
+			set(this.tools, indexes, { ...tool, selected: !selected });
 			this.tools = { ...this.tools };
 		},
 		config(key) {
@@ -246,86 +326,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sidebar {
-	margin: 0;
-	padding: 5px;
-	width: 210px;
-	background-color: #f1f1f1;
-	position: fixed;
-	height: calc(100% - 36px);
-	overflow: hidden;
-}
-
-
-div.content {
-	margin-left: 200px;
-	padding: 1px 16px;
-	height: 1000px;
-}
-
-.sidebar-icon {
-	width: 20px;
-	margin: 5px;
-	color: black;
-}
-
-.tool-item {
-	&.active {
-		background-color: #aa0404;
-		color: white;
-	}
-}
-
-.sidebar-container {
-	width: 100%;
-	height: 100%;
-}
-
-.selected-colors {
-	border: 2px solid black;
-	width: 30px;
-	height: 30px;
-	border-radius: 2px;
-}
-
-.selected-colors-container {
-	// width: 100%;
-	margin-top: 10px;
-	margin-left: 10px;
-}
-
-.background-color {
-}
-.foreground-color {
-	margin-top: -15px;
-	margin-left: 15px;
-}
-
-.current-weight {
-	width: calc(100% - 20px);
-	background-color: black;
-	margin: 0 auto;
-}
-
-.weight-info {
-	line-height: 2;
-	font-size: 14px;
-	color: rgb(87, 71, 71);
-}
-
-@media screen and (max-width: 700px) {
-	.sidebar {
-		width: 100%;
-		height: auto;
-		position: relative;
-	}
-	div.content {margin-left: 0;}
-}
-
-@media screen and (max-width: 400px) {
-	.sidebar a {
-		text-align: center;
-		float: none;
-	}
-}
+@import "./styles";
 </style>

@@ -25,7 +25,8 @@
         "line": "Tipo de Linha",
         "selected": "Selecionado",
         "zoom": "Zoom",
-        "colors": "Cores"
+        "colors": "Cores",
+        "shapes": "Formas"
     },
     "weight_dialog": {
         "title": "Espessura",
