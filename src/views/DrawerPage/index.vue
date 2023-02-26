@@ -42,9 +42,26 @@ export default {
 	data() {
 		return {
 			tool: {},
-			palette: {},
-			zoom: {},
-			font: {},
+			font: {
+				align: {key: 'align-left', icon: 'mdi-format-align-left'},
+				format: [],
+				size: 12,
+				ident: 0,
+				lists: undefined,
+				decoration: undefined,
+			},
+			zoom: {
+				value: 100,
+				min: 0,
+				max: 200,
+				color: 'blue darken-3',
+				thumbColor: '#000066',
+			},
+			palette: {
+				weight: 2,
+				foreground: '#000000FF',
+				background: '#FFFFFFFF',
+			},
 		}	
 	},
 
@@ -74,16 +91,5 @@ export default {
 </script>
 
 <style lang="scss">
-main.app-body {
-	width: 100%;
-	height: 100%;
-	margin-left: 210px;
-	/* margin-top:  */
-	background-color: blue;
-
-	canvas {
-		width: 100%;
-		height: 100%;
-	}
-}
+@import "./styles";
 </style>

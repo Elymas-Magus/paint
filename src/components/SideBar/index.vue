@@ -180,7 +180,7 @@ export default {
 	},
 	data() {
 		return {
-			selectedTool: '',
+			selectedTool: { key: 'pencil', icon: 'mdi-pencil' },
 			labels: lang.sidebar,
 			palette: {
 				weightsGroup: [
@@ -199,7 +199,7 @@ export default {
 						{ key: 'resize', icon: 'mdi-resize' },
 					],
 					[
-						{ key: 'pencil', icon: 'mdi-pencil' },
+						{ key: 'pencil', icon: 'mdi-pencil', selected: true },
 						{ key: 'brush', icon: 'mdi-brush' },
 						{ key: 'spray', icon: 'mdi-spray' },
 					],
@@ -226,19 +226,19 @@ export default {
 						{ key: 'octagram', icon: 'mdi-octagram' },
 					],
 					[
-						{ key: 'triangle', icon: 'mdi-triangle-outline' },
-						{ key: 'square', icon: 'mdi-square-outline' },
-						{ key: 'rhombus', icon: 'mdi-rhombus-outline' },
+						{ key: 'triangle-outline', icon: 'mdi-triangle-outline' },
+						{ key: 'square-outline', icon: 'mdi-square-outline' },
+						{ key: 'rhombus-outline', icon: 'mdi-rhombus-outline' },
 					],
 					[
-						{ key: 'hexagon', icon: 'mdi-hexagon-outline' },
-						{ key: 'octagon', icon: 'mdi-octagon-outline' },
-						{ key: 'circle', icon: 'mdi-circle-outline' },
+						{ key: 'hexagon-outline', icon: 'mdi-hexagon-outline' },
+						{ key: 'octagon-outline', icon: 'mdi-octagon-outline' },
+						{ key: 'circle-outline', icon: 'mdi-circle-outline' },
 					],
 					[
-						{ key: 'star', icon: 'mdi-star-outline' },
-						{ key: 'hexagram', icon: 'mdi-hexagram-outline' },
-						{ key: 'octagram', icon: 'mdi-octagram-outline' },
+						{ key: 'star-outline', icon: 'mdi-star-outline' },
+						{ key: 'hexagram-outline', icon: 'mdi-hexagram-outline' },
+						{ key: 'octagram-outline', icon: 'mdi-octagram-outline' },
 					],
 					[
 						{ key: 'slash', icon: 'mdi-slash-forward' },
@@ -266,11 +266,14 @@ export default {
 			},
 			configs: {
 				weight: 2,
-				foreground: '#FFFFFFFF',
-				background: '#000000FF',
+				foreground: '#000000FF',
+				background: '#FFFFFFFF',
 			},
 			dialog: '',
 		}
+	},
+	created() {
+		this.selectedTool = { key: 'pencil', icon: 'mdi-pencil' };
 	},
 	watch: {
 		selectedTool(newValue, oldValue) {

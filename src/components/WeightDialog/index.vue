@@ -76,23 +76,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.weight-container {
-	line-height: 2;
-}
-.weight-label {
-	width: 50px;
-}
-.weight-bar {
-	width: calc(100% - 30px);
-	background-color: black;
-	margin-top: 10px;
-	margin-bottom: 10
-}
-.weight-input {
-	border: 2px solid black;
-	border-radius: 10px;
-	padding: 5px 10px;
-	margin: 0 auto;
-	width: 100%;
-}
+@import "./styles";
 </style>

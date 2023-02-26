@@ -103,19 +103,3 @@ div.content {
 table.tools {
     margin: 0 auto;
 }
-
-@media screen and (max-width: 700px) {
-	.sidebar {
-		width: 100%;
-		height: auto;
-		position: relative;
-	}
-	div.content {margin-left: 0;}
-}
-
-@media screen and (max-width: 400px) {
-	.sidebar a {
-		text-align: center;
-		float: none;
-	}
-}
