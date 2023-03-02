@@ -16,7 +16,9 @@
             "github": "GitHub",
             "about": "Sobre",
             "clean": "Limpar"
-        }
+        },
+        "file_name": "Nome",
+        "file_format": "Formato"
     },
     "sidebar": {
         "tools": "Ferramentas",

@@ -1,17 +1,22 @@
 <template>
     <main class="app-body">
 		<canvas v-bind="canvasProps"></canvas>
+		<keyboard-listener :actions="shortcuts" />
     </main>
 </template>
 
 <script>
-import { guid } from '@/utils';
+import { guid, drawCallbacks } from '@/utils';
 import last from 'lodash/last';
-import min from 'lodash/min';
+import KeyboardListener from '@/components/KeyboardListener';
+
 const SIDEBAR_SIZE = 240;
 const TOPBAR_SIZE = 36;
 export default {
     name: 'CanvasField',
+	components: {
+		KeyboardListener,
+	},
 	props: {
 		tool: {
 			type: Object,
@@ -41,7 +46,14 @@ export default {
 			points: {
 				start: {},
 				end: {},
-			} 
+			},
+			shortcuts: [
+				{ key: 'z', callback: () => this.invoker({key: 'undo'})},
+				{ key: 'y', callback: () => this.invoker({key: 'redo'})},
+				{ key: 's', callback: () => this.invoker({key: 'download'})},
+				{ key: 'v', callback: (e) => this.invoker({key: 'paste'}, e)},
+			],
+			image: { url: '', name: '' },
 		}
 	},
 	computed: {
@@ -62,8 +74,16 @@ export default {
 	watch: {
 		'palette.background': {
 			handler(newValue) {
-				this.context.fillStyle = newValue || '#f0f0f5';
-				this.context.fillRect(0, 0, this.dimensions.w, this.dimensions.h);
+				this.canvas.style.background = newValue || '#ffffff';
+				// this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				// this.context.globalCompositeOperation = 'destination-over';
+				// this.context.strokeStyle = newValue;
+				// this.context.fillStyle = newValue;
+				// this.context.lineWidth = this.palette.weight;
+				// this.context.beginPath();
+
+				// this.context.rect(0, 0, this.canvas.width, this.canvas.height);
+				// this.context.fill();
 			}
 		}
 	},
@@ -112,179 +132,16 @@ export default {
 		nameResolver(key) {
 			const parts = key.split('-');
 			const path = {
-				tool: parts.shift(),
+				key: parts.shift(),
 				args: parts,
 			}
 			return path;
 		},
 		draw(e) {
 			const name = this.nameResolver(this.tool.key);
-			const drawCallbacks = {
-				pencil() {
-					this.context.lineTo(e.clientX - this.canvas.offsetLeft, e.clientY - this.canvas.offsetTop);
-
-					this.context.globalCompositeOperation = 'source-over';
-					this.context.strokeStyle = this.palette.foreground;
-					this.context.lineWidth = this.palette.weight;
-
-					this.context.stroke();
-				},
-				brush() {
-					this.context.lineTo(e.clientX - this.canvas.offsetLeft, e.clientY - this.canvas.offsetTop);
-
-					this.context.globalCompositeOperation = 'source-over';
-					this.context.strokeStyle = this.palette.foreground;
-					this.context.lineWidth = this.palette.weight;
-
-					this.context.stroke();
-				},
-				eraser() {
-					this.context.lineTo(e.clientX - this.canvas.offsetLeft, e.clientY - this.canvas.offsetTop);
-
-					this.context.globalCompositeOperation = 'destination-out';
-					this.context.strokeStyle = this.palette.background;
-					this.context.lineWidth = this.palette.weight;
-
-					this.context.stroke();
-				},
-				slash() {
-					this.context.lineTo(e.clientX - this.canvas.offsetLeft, e.clientY - this.canvas.offsetTop);
-
-					this.context.putImageData(last(this.elements), 0, 0);
-					this.context.globalCompositeOperation = 'source-over';
-					this.context.strokeStyle = this.palette.foreground;
-					this.context.lineWidth = this.palette.weight;
-					this.context.beginPath();
-					
-					this.context.moveTo(this.points.start.x, this.points.start.y);
-					this.context.lineTo(e.clientX - this.canvas.offsetLeft, e.clientY - this.canvas.offsetTop);
-
-					this.context.stroke();
-
-				},
-				square(mode = '') {
-					this.context.putImageData(last(this.elements), 0, 0);
-					this.context.globalCompositeOperation = 'source-over';
-					this.context.strokeStyle = this.palette.foreground;
-					this.context.lineWidth = this.palette.weight;
-					this.context.beginPath();
-
-					this.context.rect(
-						this.points.start.x,
-						this.points.start.y,
-						min([e.clientX - this.points.start.x - this.canvas.offsetLeft, this.canvas.width - this.points.start.x]),
-						min([e.clientY - this.points.start.y - this.canvas.offsetTop, this.canvas.height - this.points.start.y]),
-					);
-
-					if (mode == 'outline') {
-						this.context.stroke();
-					} else {
-						this.context.fillStyle = this.palette.foreground;
-						this.context.fill();
-					}
-				},
-				triangle(mode = '') {
-					this.context.putImageData(last(this.elements), 0, 0);
-					this.context.globalCompositeOperation = 'source-over';
-					this.context.strokeStyle = this.palette.foreground;
-					this.context.lineWidth = this.palette.weight;
-					this.context.beginPath();
-
-					this.context.moveTo(this.points.start.x + (e.clientX - this.canvas.offsetLeft - this.points.start.x) / 2, this.points.start.y);
-					this.context.lineTo(this.points.start.x, e.clientY - this.canvas.offsetTop);
-					this.context.lineTo(e.clientX - this.canvas.offsetLeft, e.clientY - this.canvas.offsetTop);
-
-					this.context.closePath();
-
-					if (mode == 'outline') {
-						this.context.stroke();
-					} else {
-						this.context.fillStyle = this.palette.foreground;
-						this.context.fill();
-					}
-				},
-				circle(mode = '') {
-					this.context.putImageData(last(this.elements), 0, 0);
-					this.context.globalCompositeOperation = 'source-over';
-					this.context.strokeStyle = this.palette.foreground;
-					this.context.lineWidth = this.palette.weight;
-					this.context.beginPath();
-
-					this.context.arc(this.points.start.x, this.points.start.y, Math.abs(e.clientX - this.points.start.x - this.canvas.offsetLeft), 0, 2 * Math.PI, false);
-
-					if (mode == 'outline') {
-						this.context.stroke();
-					} else {
-						this.context.fillStyle = this.palette.foreground;
-						this.context.fill();
-					}
-				},
-				rhombus(mode = '') {
-					this.context.putImageData(last(this.elements), 0, 0);
-					this.context.globalCompositeOperation = 'source-over';
-					this.context.strokeStyle = this.palette.foreground;
-					this.context.lineWidth = this.palette.weight;
-					this.context.beginPath();
-
-					this.context.moveTo(this.points.start.x + (e.clientX - this.canvas.offsetLeft - this.points.start.x) / 2, this.points.start.y);
-					this.context.lineTo(this.points.start.x, e.clientY - this.canvas.offsetTop);
-					this.context.lineTo(this.points.start.x + (e.clientX - this.canvas.offsetLeft - this.points.start.x) / 2, 2 * (e.clientY - this.canvas.offsetTop) - this.points.start.y);
-					this.context.lineTo(e.clientX - this.canvas.offsetLeft, e.clientY - this.canvas.offsetTop);
-
-					this.context.closePath();
-					if (mode == 'outline') {
-						this.context.stroke();
-					} else {
-						this.context.fillStyle = this.palette.foreground;
-						this.context.fill();
-					}
-				},
-				trapezoid(mode = '') {
-					this.context.putImageData(last(this.elements), 0, 0);
-					this.context.globalCompositeOperation = 'source-over';
-					this.context.strokeStyle = this.palette.foreground;
-					this.context.lineWidth = this.palette.weight;
-					this.context.beginPath();
-
-					this.context.moveTo(this.points.start.x + (e.clientX - this.canvas.offsetLeft - this.points.start.x) / 2, this.points.start.y);
-					this.context.lineTo(this.points.start.x, (e.clientY - this.canvas.offsetTop / 2));
-					this.context.lineTo(e.clientX - this.canvas.offsetLeft, (e.clientY - this.canvas.offsetTop / 2));
-					this.context.lineTo(e.clientX - this.canvas.offsetLeft, this.points.start.y);
-
-					this.context.closePath();
-					if (mode == 'outline') {
-						this.context.stroke();
-					} else {
-						this.context.fillStyle = this.palette.foreground;
-						this.context.fill();
-					}
-				},
-				star() {
-					this.context.putImageData(last(this.elements), 0, 0);
-					this.context.globalCompositeOperation = 'source-over';
-					this.context.strokeStyle = this.palette.foreground;
-					this.context.lineWidth = this.palette.weight;
-					this.context.beginPath();
-
-					this.context.moveTo(108, 0.0);
-					this.context.lineTo(141, 70);
-					this.context.lineTo(218, 78.3);
-					this.context.lineTo(162, 131);
-					this.context.lineTo(175, 205);
-					this.context.lineTo(108, 170);
-					this.context.lineTo(41.2, 205);
-					this.context.lineTo(55, 131);
-					this.context.lineTo(1, 78);
-					this.context.lineTo(75, 68);
-					this.context.lineTo(108, 0);
-
-					this.context.closePath();
-					this.context.stroke();
-				},
-			}
 
 			if (this.isDrawing) {
-				this.run(drawCallbacks[name.tool], name.args);
+				this.run(drawCallbacks[name.key], { e, args: name.args });
 			}
 		},
 		stop(e) {
@@ -299,11 +156,12 @@ export default {
 				this.elements.push(this.context.getImageData(0, 0, this.canvas.width, this.canvas.height));
 			}
 		},
-		run(callback, args = []) {
+		run(callback, { e, args = [] }) {
 			if (typeof callback !== 'function') return;
-			return callback.call(this, ...args);
+			return callback.call(this, e, ...args);
 		},
-		invoker(command) {
+		invoker(command, e = undefined) {
+			const name = this.nameResolver(command.key);
 			const commands = {
 				undo() {
 					if (this.elements.length <= 1) {
@@ -316,19 +174,86 @@ export default {
 				redo() {
 					if (this.deleteds.length > 0) {
 						this.elements.push(this.deleteds.pop());
-						this.context.putImageData(last(this.deleteds), 0, 0);
+						this.context.putImageData(last(this.elements), 0, 0);
 					}
 				},
 				clean() {
-					console.log(this.palette.background)
 					this.context.fillStyle = this.palette.background;
 					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
 					this.elements = [];
-				}
+				},
+				paste(e) {
+					console.log(e);
+					const pasteImage = async () => {
+						try {
+							const destinationImage = new Image();
+							const permission = await navigator.permissions.query({
+								name: "clipboard-read",
+							});
+							if (permission.state === "denied") {
+								throw new Error("Not allowed to read clipboard.");
+							}
+							const clipboardContents = await navigator.clipboard.read();
+							for (const item of clipboardContents) {
+								if (!item.types.includes("image/png")) {
+									throw new Error("Clipboard contains non-image data.");
+								}
+								const blob = await item.getType("image/png");
+								destinationImage.src = URL.createObjectURL(blob);
+								destinationImage.onload = () => {
+									this.context.drawImage(destinationImage, 100, 100);
+								}
+
+							}
+						} catch (error) {
+							console.error(error.message);
+						}
+					}
+					pasteImage().then(() => console.log('paste'));
+				},
+				download(_, args) {
+					const { name, format } = JSON.parse(args);
+					const tmp = document.createElement('canvas');
+					const tmpCtx = tmp.getContext('2d');
+					const tmpImage = new Image();
+					const tmpUrl = this.canvas.toDataURL('image/' + format.label + '', 1.0)
+						.replace('image/' + format.label + '', 'image/octet-stream');
+
+					tmp.width = this.canvas.width;
+					tmp.height = this.canvas.height;
+
+					tmpCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+					tmpCtx.globalCompositeOperation = 'destination-out';
+					tmpCtx.strokeStyle = this.palette.background;
+					tmpCtx.fillStyle = this.palette.background;
+					tmpCtx.lineWidth = this.palette.weight;
+					tmpCtx.beginPath();
+
+					tmpCtx.rect(0, 0, this.canvas.width, this.canvas.height);
+					tmpCtx.fill();
+
+					tmpImage.src = tmpUrl
+					tmpImage.onload = () => {
+						tmpCtx.drawImage(tmpImage, 0, 0);
+
+						this.image = {
+							name: name + '.' + format.extension,
+							url: tmp.toDataURL('image/' + format.label + '', 1.0)
+								.replace('image/' + format.label + '', 'image/octet-stream'),
+						};
+
+						const link = document.createElement('a');
+
+						link.download = this.image.name;
+						link.href = this.image.url;
+
+						link.click();
+					}
+				},
 			}
-			this.run(commands[command.key]);
+			this.run(commands[name.key], { e, args: name.args });
 		},
 		onResize() {
 			this.dimensions = {

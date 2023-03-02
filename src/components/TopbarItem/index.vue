@@ -28,7 +28,6 @@
                     right
                     content-class="submenu"
                     :offset-x="true"
-                    :close-on-click="false"
                     :close-on-content-click="false"
                     v-if="item.childrens"
                 >

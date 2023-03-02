@@ -6,7 +6,37 @@
 				:label="labels.file"
 				:options="fileOptions"
 				@run-command="runCommand"
-			/>
+			>
+				<template #children_save>
+					<div class="w-100">
+						<form @submit.prevent="download">
+							<v-text-field
+								v-model="file.name"
+								:label="labels.file_name"
+								required
+							></v-text-field>
+							<v-select
+								v-model="file.format"
+								:items="formatsForDownload"
+								:label="labels.file_format"
+								item-text="label"
+								item-value="key"
+								return-object
+								required
+							></v-select>
+							<v-btn
+								type="submit"
+								class="mr-4"
+							>
+								submit
+							</v-btn>
+							<v-btn @click="clearFileConfig">
+								clear
+							</v-btn>
+						</form> 
+					</div>
+				</template>
+			</topbar-item>
 			<topbar-item
 				:label="labels.edit"
 				:options="editOptions"
@@ -43,6 +73,7 @@ import set from 'lodash/set';
 import each from 'lodash/each';
 import findIndex from 'lodash/findIndex';
 import TopbarItem from '@/components/TopbarItem';
+import { formatsForDownload } from '@/utils';
 import { pt_br } from '@/langs';
 
 const lang = pt_br;
@@ -54,8 +85,20 @@ export default {
 	data() {
 		return {
 			labels: lang.topbar,
+			formatsForDownload,
+			file: {
+				name: '',
+				format: '',
+			},
 			fileOptions: [
-				{key: 'download', label: lang.topbar.options.download, icon: 'mdi-download'},
+				{
+					key: 'download',
+					label: lang.topbar.options.download,
+					icon: 'mdi-download',
+					childrens: [{
+						key: 'save'
+					}]
+				},
 				{key: 'close', label: lang.topbar.options.close, icon: 'mdi-close'},
 			],
 			editOptions: [
@@ -190,6 +233,15 @@ export default {
 				},
 			}
 			return callbacks[group];
+		},
+		clearFileConfig() {
+			this.file = {
+				name: '',
+				format: '',
+			}
+		},
+		download() {
+			this.runCommand({ key: 'download-' + JSON.stringify(this.file) });
 		}
 	},
 }

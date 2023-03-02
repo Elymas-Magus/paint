@@ -216,14 +216,14 @@ export default {
 						{ key: 'rhombus', icon: 'mdi-rhombus' },
 					],
 					[
+						{ key: 'pentagon', icon: 'mdi-pentagon' },
 						{ key: 'hexagon', icon: 'mdi-hexagon' },
 						{ key: 'octagon', icon: 'mdi-octagon' },
-						{ key: 'circle', icon: 'mdi-circle' },
 					],
 					[
+						{ key: 'circle', icon: 'mdi-circle' },
 						{ key: 'star', icon: 'mdi-star' },
 						{ key: 'hexagram', icon: 'mdi-hexagram' },
-						{ key: 'octagram', icon: 'mdi-octagram' },
 					],
 					[
 						{ key: 'triangle-outline', icon: 'mdi-triangle-outline' },
@@ -231,29 +231,19 @@ export default {
 						{ key: 'rhombus-outline', icon: 'mdi-rhombus-outline' },
 					],
 					[
+						{ key: 'pentagon-outline', icon: 'mdi-pentagon-outline' },
 						{ key: 'hexagon-outline', icon: 'mdi-hexagon-outline' },
 						{ key: 'octagon-outline', icon: 'mdi-octagon-outline' },
-						{ key: 'circle-outline', icon: 'mdi-circle-outline' },
 					],
 					[
+						{ key: 'circle-outline', icon: 'mdi-circle-outline' },
 						{ key: 'star-outline', icon: 'mdi-star-outline' },
 						{ key: 'hexagram-outline', icon: 'mdi-hexagram-outline' },
-						{ key: 'octagram-outline', icon: 'mdi-octagram-outline' },
 					],
 					[
 						{ key: 'slash', icon: 'mdi-slash-forward' },
-						{ key: 'arrow-top-left', icon: 'mdi-arrow-top-left' },
-						{ key: 'arrow-top-right', icon: 'mdi-arrow-top-right' },
-					],
-					[
-						{ key: 'arrow-bottom-left', icon: 'mdi-arrow-bottom-left' },
-						{ key: 'arrow-bottom-right', icon: 'mdi-arrow-bottom-right' },
-						{ key: 'arrow-top-left-thin', icon: 'mdi-arrow-top-left-thin' },
-					],
-					[
-						{ key: 'arrow-top-right-thin', icon: 'mdi-arrow-top-right-thin' },
-						{ key: 'arrow-bottom-left-thin', icon: 'mdi-arrow-bottom-left-thin' },
-						{ key: 'arrow-bottom-right-thin', icon: 'mdi-arrow-bottom-right-thin' },
+						{ key: 'arrow', icon: 'mdi-arrow-top-left' },
+						{ key: 'arrow-thin', icon: 'mdi-arrow-top-left-thin' },
 					],
 				],
 			},
