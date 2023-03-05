@@ -4,4 +4,3 @@ export { default as CanvasField } from './CanvasField/index.vue';
 export { default as PaintingBox } from './PaintingBox/index.vue';
 export { default as ColorDialog } from './ColorDialog/index.vue';
 export { default as WeightDialog } from './WeightDialog';
-export { default as KeyboardListener } from './KeyboardListener';
