@@ -93,21 +93,16 @@ const createShapesCallbacks = {
             strokeWidth: this.palette.weight,
         });
     },
-    circle(e, mode = '') {
-        this.context.buffer.putImageData(last(this.elements), 0, 0);
-        this.context.buffer.globalCompositeOperation = 'source-over';
-        this.context.buffer.strokeStyle = this.palette.foreground;
-        this.context.buffer.lineWidth = this.palette.weight;
-        this.context.buffer.beginPath();
-
-        this.context.buffer.arc(this.points.start.x, this.points.start.y, Math.abs(e.clientX - this.points.start.x - this.canvas.buffer.offsetLeft), 0, 2 * Math.PI, false);
-
-        if (mode == 'outline') {
-            this.context.buffer.stroke();
-        } else {
-            this.context.buffer.fillStyle = this.palette.foreground;
-            this.context.buffer.fill();
-        }
+    circle(_, mode = '') {
+        const { start } = this.points;
+        factory.make.call(this, 'Circle', {
+            x: start.x,
+            y: start.y,
+            fill: mode == 'outline' ?
+                this.palette.background : this.palette.foreground,
+            stroke: this.palette.foreground,
+            strokeWidth: this.palette.weight,
+        });
     },
     rhombus(e, mode = '') {
         this.context.buffer.putImageData(last(this.elements), 0, 0);
@@ -208,131 +203,83 @@ const createShapesCallbacks = {
             strokeWidth: this.palette.weight,
         });
     },
-    pentagram(e, mode = '') {
-        this.context.buffer.putImageData(last(this.elements), 0, 0);
-        this.context.buffer.globalCompositeOperation = 'source-over';
-        this.context.buffer.strokeStyle = this.palette.foreground;
-        this.context.buffer.lineWidth = this.palette.weight;
-        this.context.buffer.beginPath();
-
+    pentagram(_, mode = '') {
         const { start } = this.points;
-        const mouse = {
-            x: e.clientX - this.canvas.buffer.offsetLeft,
-            y: e.clientY - this.canvas.buffer.offsetTop,
-        }
-        // const distancy = Math.sqrt(Math.pow(mouse.x -start.x, 2) + Math.pow(mouse.y -start.y, 2));
-        const cos18 = Math.cos(Math.PI / 10);
-        const sin18 = Math.sin(Math.PI / 10);
-        const tan18 = Math.tan(Math.PI / 10);
-        const cos36 = Math.cos(Math.PI / 5);
-        const sin36 = Math.sin(Math.PI / 5);
-
-        const current = {
-            x: start.x + tan18 * (mouse.y - start.y),
-            y: mouse.y,
-        }
-        const axis = mouse.y < start.y ? -1 : 1;
-        const distancy = Math.sqrt(Math.pow(current.x -start.x, 2) + Math.pow(current.y -start.y, 2));
-
-        if (mode == 'outline') {
-            const straights = {
-                a: 2 * axis * distancy * sin18 * cos36,
-                b: 2 * axis * distancy * sin18,
-                c: 2 * axis * distancy * sin18 * sin36,
-                d: 4 * axis * sin36 * tan18 * distancy * sin18 * sin36,
-                e: axis * cos18 * (distancy / 2 + 2 * tan18 * distancy * sin18 * sin36),
-                f: 2 * axis * tan18 * distancy * sin18 * sin36,
-                g: axis * sin18 * (distancy / 2 + 2 * tan18 * distancy * sin18 * sin36)
-            }
-            
-            // Star
-            this.context.buffer.moveTo(start.x, start.y); // a
-            this.context.buffer.lineTo(start.x + straights.f, start.y + straights.c); // a'
-            this.context.buffer.lineTo(start.x + straights.a, start.y + straights.c); // b
-            this.context.buffer.lineTo(start.x + straights.g, start.y + straights.e); // b'
-            this.context.buffer.lineTo(current.x, current.y); // c
-            this.context.buffer.lineTo(start.x, start.y + straights.e + straights.d); // c'
-            this.context.buffer.lineTo(current.x - straights.b, current.y); // d
-            this.context.buffer.lineTo(start.x - straights.g, start.y + straights.e); // d'
-            this.context.buffer.lineTo(start.x - straights.a, start.y + straights.c); // e
-            this.context.buffer.lineTo(start.x - straights.f, start.y + straights.c); // e'
-            this.context.buffer.lineTo(start.x, start.y); // a
-
-            this.context.buffer.closePath();
-            
-            this.context.buffer.closePath();						
-            this.context.buffer.stroke();
-        } else {
-            this.context.buffer.fillStyle = this.palette.foreground;
-            const straights = {
-                a: 2 * axis * distancy * sin18 * cos36,
-                b: 2 * axis * distancy * sin18,
-                c: 2 * axis * distancy * sin18 * sin36,
-            }
-            
-            // Star-outline
-            this.context.buffer.moveTo(start.x, start.y);
-            this.context.buffer.lineTo(current.x, current.y);
-            this.context.buffer.lineTo(start.x - straights.a, start.y + straights.c);
-            this.context.buffer.lineTo(start.x + straights.a, start.y + straights.c);
-            this.context.buffer.lineTo(current.x - straights.b, current.y);
-            this.context.buffer.lineTo(start.x, start.y);
-
-            this.context.buffer.closePath();
-            this.context.buffer.fill();
-        }
+        factory.make.call(this, 'Star', {
+            x: start.x,
+            y: start.y,
+            numPoints: 5,
+            innerRadius: 0,
+            fill: mode == 'outline' ?
+                this.palette.background : this.palette.foreground,
+            stroke: this.palette.foreground,
+            strokeWidth: this.palette.weight,
+        });
     },
-    hexagram(e, mode = '') {
-        this.context.buffer.putImageData(last(this.elements), 0, 0);
-        this.context.buffer.globalCompositeOperation = 'source-over';
-        this.context.buffer.strokeStyle = this.palette.foreground;
-        this.context.buffer.lineWidth = this.palette.weight;
-        this.context.buffer.beginPath();
-
+    hexagram(_, mode = '') {
         const { start } = this.points;
-        const mouse = {
-            x: e.clientX - this.canvas.buffer.offsetLeft,
-            y: e.clientY - this.canvas.buffer.offsetTop,
-        }
-        const tan30 = Math.tan(Math.PI / 6);
-        const current = {
-            x: start.x + (mouse.y - start.y) / tan30,
-            y: mouse.y,
-        }
-        
-        const axis = mouse.y < start.y ? -1 : 1;
-        const distancy = Math.sqrt(Math.pow(current.x -start.x, 2) + Math.pow(current.y -start.y, 2));
-        const side = axis * distancy / 3;
-        const height = axis * side * Math.sqrt(3) / 2;
-
-        this.context.buffer.moveTo(start.x, start.y); // a
-        this.context.buffer.lineTo(start.x + side / 2, start.y + height); // a'
-        
-        this.context.buffer.lineTo(start.x + (1.5 * side), start.y + height); // b
-        this.context.buffer.lineTo(start.x + side, start.y + (2 * height)); // b'
-
-        this.context.buffer.lineTo(start.x + (1.5 * side), start.y + (3 * height)); // c
-        this.context.buffer.lineTo(start.x + side / 2, start.y + (3 * height)); // c'
-
-        this.context.buffer.lineTo(start.x, start.y + (4 * height)); // d
-        this.context.buffer.lineTo(start.x - side / 2, start.y + (3 * height)); // d'
-        
-        this.context.buffer.lineTo(start.x - (1.5 * side), start.y + (3 * height)); // e
-        this.context.buffer.lineTo(start.x - side, start.y + (2 * height)); // e'
-        
-        this.context.buffer.lineTo(start.x - (1.5 * side), start.y + height); // f
-        this.context.buffer.lineTo(start.x - side / 2, start.y + height); // f
-        this.context.buffer.lineTo(start.x, start.y); // a
-        
-        this.context.buffer.closePath();
-
-        if (mode == 'outline') {
-            this.context.buffer.stroke();
-        } else {
-            this.context.buffer.fillStyle = this.palette.foreground;
-            this.context.buffer.fill();
-        }
+        factory.make.call(this, 'Star', {
+            x: start.x,
+            y: start.y,
+            numPoints: 6,
+            innerRadius: 0,
+            fill: mode == 'outline' ?
+                this.palette.background : this.palette.foreground,
+            stroke: this.palette.foreground,
+            strokeWidth: this.palette.weight,
+        });
     },
+    // hexagram(e, mode = '') {
+    //     this.context.buffer.putImageData(last(this.elements), 0, 0);
+    //     this.context.buffer.globalCompositeOperation = 'source-over';
+    //     this.context.buffer.strokeStyle = this.palette.foreground;
+    //     this.context.buffer.lineWidth = this.palette.weight;
+    //     this.context.buffer.beginPath();
+
+    //     const { start } = this.points;
+    //     const mouse = {
+    //         x: e.clientX - this.canvas.buffer.offsetLeft,
+    //         y: e.clientY - this.canvas.buffer.offsetTop,
+    //     }
+    //     const tan30 = Math.tan(Math.PI / 6);
+    //     const current = {
+    //         x: start.x + (mouse.y - start.y) / tan30,
+    //         y: mouse.y,
+    //     }
+        
+    //     const axis = mouse.y < start.y ? -1 : 1;
+    //     const distancy = Math.sqrt(Math.pow(current.x -start.x, 2) + Math.pow(current.y -start.y, 2));
+    //     const side = axis * distancy / 3;
+    //     const height = axis * side * Math.sqrt(3) / 2;
+
+    //     this.context.buffer.moveTo(start.x, start.y); // a
+    //     this.context.buffer.lineTo(start.x + side / 2, start.y + height); // a'
+        
+    //     this.context.buffer.lineTo(start.x + (1.5 * side), start.y + height); // b
+    //     this.context.buffer.lineTo(start.x + side, start.y + (2 * height)); // b'
+
+    //     this.context.buffer.lineTo(start.x + (1.5 * side), start.y + (3 * height)); // c
+    //     this.context.buffer.lineTo(start.x + side / 2, start.y + (3 * height)); // c'
+
+    //     this.context.buffer.lineTo(start.x, start.y + (4 * height)); // d
+    //     this.context.buffer.lineTo(start.x - side / 2, start.y + (3 * height)); // d'
+        
+    //     this.context.buffer.lineTo(start.x - (1.5 * side), start.y + (3 * height)); // e
+    //     this.context.buffer.lineTo(start.x - side, start.y + (2 * height)); // e'
+        
+    //     this.context.buffer.lineTo(start.x - (1.5 * side), start.y + height); // f
+    //     this.context.buffer.lineTo(start.x - side / 2, start.y + height); // f
+    //     this.context.buffer.lineTo(start.x, start.y); // a
+        
+    //     this.context.buffer.closePath();
+
+    //     if (mode == 'outline') {
+    //         this.context.buffer.stroke();
+    //     } else {
+    //         this.context.buffer.fillStyle = this.palette.foreground;
+    //         this.context.buffer.fill();
+    //     }
+    // },
 }
 
 export default createShapesCallbacks;

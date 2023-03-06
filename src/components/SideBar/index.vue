@@ -222,7 +222,7 @@ export default {
 					],
 					[
 						{ key: 'circle', icon: 'mdi-circle' },
-						{ key: 'star', icon: 'mdi-star' },
+						{ key: 'pentagram', icon: 'mdi-star' },
 						{ key: 'hexagram', icon: 'mdi-hexagram' },
 					],
 					[
@@ -237,7 +237,7 @@ export default {
 					],
 					[
 						{ key: 'circle-outline', icon: 'mdi-circle-outline' },
-						{ key: 'star-outline', icon: 'mdi-star-outline' },
+						{ key: 'pentagram-outline', icon: 'mdi-star-outline' },
 						{ key: 'hexagram-outline', icon: 'mdi-hexagram-outline' },
 					],
 					[

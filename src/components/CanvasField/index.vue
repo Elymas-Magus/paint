@@ -18,12 +18,13 @@ import {
 	SPACE_HEX,
 } from '@/utils';
 import {
+	AppLoading,
 	KonvasMixins
 } from '@/mixins';
 
 export default {
     name: 'CanvasField',
-	mixins: [KonvasMixins],
+	mixins: [AppLoading, KonvasMixins],
 	props: {
 		tool: {
 			type: Object,
@@ -41,7 +42,6 @@ export default {
 	data() {
 		return {
 			uuid: 'canvas-' + guid(),
-			loading: false,
 			shortcuts: {
 				keydown: [
 					{ key: 'ctrl+z', callback: () => this.invoker({key: 'undo'})},
@@ -68,12 +68,6 @@ export default {
 		},
 	},
 	methods: {
-		load() {
-			this.loading = true;
-		},
-		stopLoading() {
-			this.loading = false;
-		},
 		getContainer() {
 			return document.querySelector('#canvas-container');
 		},

@@ -16,12 +16,10 @@ function keyboardListener() {
     this.actions = [];
 
     this.on = (eventName) => {
-        console.log('on', eventName);
         this.eventName = eventName;
         return this;
     }
     this.action = (actions) => {
-        console.log('actions', actions);
         this.actions = actions;
         this.listen();
     }
